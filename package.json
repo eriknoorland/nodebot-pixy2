@@ -1,0 +1,33 @@
+{
+  "name": "nodebot-pixy2",
+  "version": "0.1.0",
+  "description": "A Node module to communicate with the Pixy2 camera through an Arduino",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eriknoorland/nodebot-pixy2.git"
+  },
+  "keywords": [
+    "nodebot-pixy2",
+    "pixy2",
+    "node",
+    "javascript",
+    "image recognition",
+    "serial",
+    "usb"
+  ],
+  "author": "Erik Noorland <mail@eriknoorland.nl> (eriknoorland.nl)",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/eriknoorland/nodebot-pixy2/issues"
+  },
+  "homepage": "https://github.com/eriknoorland/nodebot-pixy2#readme",
+  "dependencies": {
+    "cobs": "^0.2.1",
+    "serialport": "^7.1.5"
+  },
+  "devDependencies": {}
+}
