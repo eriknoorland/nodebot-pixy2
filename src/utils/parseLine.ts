@@ -1,4 +1,6 @@
-const parseLine = (data) => {
+import { LineData } from '../types';
+
+export default (data: LineData) => {
   return {
     index: data[0],
     flags: data[1],
@@ -8,5 +10,3 @@ const parseLine = (data) => {
     y1: data[5]
   };
 };
-
-module.exports = parseLine;

@@ -1,4 +1,6 @@
-const parseBlocks = (data) => {
+import { BlocksData } from '../types';
+
+export default (data: BlocksData) => {
   return {
     signature: data[0],
     x: data[1],
@@ -10,5 +12,3 @@ const parseBlocks = (data) => {
     age: data[7]
   };
 };
-
-module.exports = parseBlocks;

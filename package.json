@@ -1,14 +1,23 @@
 {
-  "name": "nodebot-pixy2",
+  "name": "@eriknoorland/nodebot-pixy2",
   "version": "0.1.0",
   "description": "A Node module to communicate with the Pixy2 camera through an Arduino",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eriknoorland/nodebot-pixy2.git"
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "nodebot-pixy2",
@@ -21,13 +30,17 @@
   ],
   "author": "Erik Noorland <mail@eriknoorland.nl> (eriknoorland.nl)",
   "license": "",
-  "bugs": {
-    "url": "https://github.com/eriknoorland/nodebot-pixy2/issues"
-  },
-  "homepage": "https://github.com/eriknoorland/nodebot-pixy2#readme",
   "dependencies": {
     "cobs": "^0.2.1",
-    "serialport": "^7.1.5"
+    "serialport": "^10"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/node": "^20.10.6",
+    "rollup": "^4.9.2",
+    "rollup-plugin-dts": "^6.1.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3"
+  }
 }

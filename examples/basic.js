@@ -1,4 +1,4 @@
-const Pixy2 = require('../src/Pixy2');
+const Pixy2 = require('../dist/index.cjs');
 const pixy2 = Pixy2('/dev/tty.usbserial-1420');
 
 pixy2.on('data', console.log);

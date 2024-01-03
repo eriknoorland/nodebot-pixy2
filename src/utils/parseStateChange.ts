@@ -1,4 +1,6 @@
-const parseStateChange = (data) => {
+import { StateChangeData } from '../types';
+
+export default (data: StateChangeData) => {
   return {
     code: data[0],
     state: data[1],
@@ -6,5 +8,3 @@ const parseStateChange = (data) => {
     frameHeight: data[3]
   };
 };
-
-module.exports = parseStateChange;
