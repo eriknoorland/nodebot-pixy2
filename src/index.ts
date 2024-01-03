@@ -1,37 +1,25 @@
-const EventEmitter = require('events');
-const cobs = require('cobs');
-const SerialPort = require('serialport');
-const Parser = require('./Parser');
-const State = require('./State');
+import EventEmitter from 'events';
+import { SerialPort } from 'serialport';
+import Parser from './Parser';
+import State from './State';
+import { StateProps } from './interfaces';
 
-/**
- * Pixy2
- * @param {String} path
- * @return {Object}
- */
-const Pixy2 = (path) => {
+const cobs = require('cobs');
+
+const Pixy2 = (path: string) => {
   const eventEmitter = new EventEmitter();
 
   let state = State.IDLE;
-  let parser;
-  let port;
+  let port: SerialPort;
+  let parser: Parser;
 
-  /**
-   * Constructor
-   */
-  function constructor() {}
-
-  /**
-   * Init
-   * @return {Promise}
-   */
-  function init() {
+  function init(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (port) {
         setTimeout(reject, 0);
       }
 
-      port = new SerialPort(path, { baudRate: 115200 });
+      port = new SerialPort({ path, baudRate: 115200 });
       parser = new Parser();
 
       port.pipe(parser);
@@ -48,12 +36,7 @@ const Pixy2 = (path) => {
     });
   }
 
-  /**
-   * 
-   * @param {String} newState
-   * @param {Object} args
-   */
-  function setState(newState, args = {}) {
+  function setState(newState: string, args: StateProps = {}): Promise<void> {
     const pan = numberToHex(args.pan || 127);
     const tilt = numberToHex(args.tilt || 0);
     const led = numberToHex(args.led || 0);
@@ -79,26 +62,14 @@ const Pixy2 = (path) => {
     });
   }
 
-  /**
-   * 
-   * @param {Array} buffer
-   */
-  function writeToSerialPort(buffer) {
+  function writeToSerialPort(buffer: number[]) {
     port.write(cobs.encode(Buffer.from(buffer), true));
   }
 
-  /**
-   * Returns a hex value based on the given number
-   * @param {Number} value
-   * @return {String}
-   */
-  function numberToHex(value) {
-    return `0x${('00' + value.toString(16)).substr(-2).toUpperCase()}`;
+  function numberToHex(value: number) {
+    return Number(`0x${('00' + value.toString(16)).substr(-2).toUpperCase()}`);
   }
 
-  /**
-   * Port open event handler
-   */
   function onPortOpen() {
     port.flush(error => {
       if (error) {
@@ -109,14 +80,12 @@ const Pixy2 = (path) => {
     });
   }
 
-  constructor();
-
-  return {
+  return Object.freeze({
     init,
     setState,
     on: eventEmitter.on.bind(eventEmitter),
     off: eventEmitter.off.bind(eventEmitter),
-  };
+  });
 };
 
 module.exports = Pixy2;

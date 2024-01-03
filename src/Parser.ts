@@ -1,17 +1,16 @@
-const Transform = require('stream').Transform;
+import { Transform } from 'stream';
+import parseLine from './utils/parseLine';
+import parseBlocks from './utils/parseBlocks';
+import parseStateChange from './utils/parseStateChange';
+import { BlocksData, LineData, StateChangeData } from './types';
+
 const cobs = require('cobs');
-const parseLine = require('./utils/parseLine');
-const parseBlocks = require('./utils/parseBlocks');
-const parseStateChange = require('./utils/parseStateChange');
 const numDescriptorBytes = 4;
 
-/**
- * Parser
- */
 class Parser extends Transform {
-  /**
-   * Constructor
-   */
+  startFlags: Buffer;
+  buffer: Buffer;
+
   constructor() {
     super();
 
@@ -19,13 +18,7 @@ class Parser extends Transform {
     this.buffer = Buffer.alloc(0);
   }
 
-  /**
-   * Transform
-   * @param {Buffer} chunk
-   * @param {String} encoding
-   * @param {Function} callback
-   */
-  _transform(chunk, encoding, callback) {
+  _transform(chunk: Buffer, encoding: string, callback: Function) {
     this.buffer = Buffer.concat([this.buffer, chunk]);
 
     for (let j = 0; j < this.buffer.length; j++) {
@@ -39,8 +32,8 @@ class Parser extends Transform {
           if (this.buffer.length >= packetStart + numDescriptorBytes + dataLength + 1) {
             const packetEnd = packetStart + numDescriptorBytes + dataLength + 1;
             const packet = this.buffer.slice(packetStart, packetEnd);
-            const decodedPacket = cobs.decode(packet);
-            const packetData = [];
+            const decodedPacket: Buffer = cobs.decode(packet);
+            const packetData: number[] = [];
 
             this.buffer = this.buffer.slice(packetEnd);
             j = 0;
@@ -56,15 +49,15 @@ class Parser extends Transform {
                 break;
 
               case 0x15:
-                this.emit('line', parseLine(packetData));
+                this.emit('line', parseLine(packetData as LineData));
                 break;
 
               case 0x20:
-                this.emit('blocks', parseBlocks(packetData));
+                this.emit('blocks', parseBlocks(packetData as BlocksData));
                 break;
 
               case 0x25:
-                this.emit('stateChange', parseStateChange(packetData));
+                this.emit('stateChange', parseStateChange(packetData as StateChangeData));
                 break;
             }
           }
@@ -76,4 +69,4 @@ class Parser extends Transform {
   }
 }
 
-module.exports = Parser;
+export default Parser;
